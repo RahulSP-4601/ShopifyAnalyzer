@@ -69,9 +69,11 @@ export function ChatSidebar({ storeName, storeDomain }: ChatSidebarProps) {
     <aside className="flex w-72 flex-col border-r border-slate-200 bg-slate-50">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-slate-200 p-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-bold shadow-md shadow-emerald-500/25">
-          S
-        </div>
+        <img
+          src="/logo.png"
+          alt="ShopIQ Logo"
+          className="h-15 w-15 object-contain"
+        />
         <div className="flex-1 min-w-0">
           <h1 className="font-semibold text-slate-900 truncate">{storeName}</h1>
           <p className="text-xs text-slate-500 truncate">{storeDomain}</p>
