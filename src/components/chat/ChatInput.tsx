@@ -115,13 +115,23 @@ export function ChatInput({
         throw new Error("Invalid upload response: missing attachment data");
       }
 
+      const serverAttachment = data.attachment;
+
+      // Validate required fields exist, fall back to local values if missing
+      if (!serverAttachment.url) {
+        throw new Error("Invalid upload response: missing URL");
+      }
+
+      // Validate type - only accept "file" or "audio", default based on local attachment
+      const validType = serverAttachment.type === "audio" ? "audio" : "file";
+
       return {
-        type: data.attachment.type,
-        name: data.attachment.name,
-        size: data.attachment.size,
-        mimeType: data.attachment.mimeType,
-        url: data.attachment.url,
-        path: data.attachment.path,
+        type: validType,
+        name: serverAttachment.name || attachment.name,
+        size: serverAttachment.size ?? attachment.size,
+        mimeType: serverAttachment.mimeType || attachment.mimeType,
+        url: serverAttachment.url,
+        path: serverAttachment.path || "",
       };
     } catch (error) {
       console.error("Failed to upload attachment:", error);

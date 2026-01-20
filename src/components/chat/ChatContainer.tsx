@@ -59,14 +59,19 @@ export function ChatContainer({
   // Convert uploaded attachments to display format with temporary IDs for optimistic UI
   const convertAttachmentsForOptimisticUI = (attachments?: UploadedAttachment[]): MessageAttachment[] | undefined => {
     if (!attachments || attachments.length === 0) return undefined;
-    return attachments.map((att, index) => ({
-      id: `temp-att-${Date.now()}-${index}`,
-      type: att.type as "file" | "audio",
-      name: att.name,
-      size: att.size,
-      url: att.url,
-      mimeType: att.mimeType,
-    }));
+    return attachments.map((att, index) => {
+      // Validate type before using - only accept "file" or "audio", default to "file"
+      const validType: "file" | "audio" = att.type === "audio" ? "audio" : "file";
+
+      return {
+        id: `temp-att-${Date.now()}-${index}`,
+        type: validType,
+        name: att.name,
+        size: att.size,
+        url: att.url,
+        mimeType: att.mimeType,
+      };
+    });
   };
 
   const sendMessage = async (content: string, attachments?: UploadedAttachment[]) => {
