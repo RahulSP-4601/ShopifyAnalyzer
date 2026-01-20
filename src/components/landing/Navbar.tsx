@@ -53,7 +53,7 @@ export function Navbar() {
             href="/connect"
             className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full shadow-md shadow-emerald-500/25 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/30 hover:scale-105"
           >
-            Book a Demo
+            Watch Demo
             <svg
               className="w-4 h-4"
               fill="none"
