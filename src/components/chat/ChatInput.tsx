@@ -51,6 +51,7 @@ export function ChatInput({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isCancelledRecordingRef = useRef<boolean>(false);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -131,16 +132,17 @@ export function ChatInput({
 
       if (attachments.length > 0) {
         onUploadStart?.();
-        setUploadProgress("Uploading files...");
+        uploadedAttachments = [];
 
         try {
-          const uploadPromises = attachments.map((att, index) => {
-            setUploadProgress(`Uploading ${index + 1}/${attachments.length}...`);
-            return uploadAttachment(att);
-          });
-
-          const results = await Promise.all(uploadPromises);
-          uploadedAttachments = results.filter((r): r is UploadedAttachment => r !== null);
+          // Upload files sequentially to show accurate progress
+          for (let i = 0; i < attachments.length; i++) {
+            setUploadProgress(`Uploading ${i + 1}/${attachments.length}...`);
+            const result = await uploadAttachment(attachments[i]);
+            if (result) {
+              uploadedAttachments.push(result);
+            }
+          }
 
           if (uploadedAttachments.length !== attachments.length) {
             // Some uploads failed
@@ -197,7 +199,7 @@ export function ChatInput({
       }
 
       const attachment: Attachment = {
-        id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
         type: "file",
         name: file.name,
         size: file.size,
@@ -253,6 +255,7 @@ export function ChatInput({
       const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
+      isCancelledRecordingRef.current = false;
 
       // Store the actual mimeType being used
       const actualMimeType = mediaRecorder.mimeType || "audio/webm";
@@ -264,6 +267,12 @@ export function ChatInput({
       };
 
       mediaRecorder.onstop = () => {
+        // Check if recording was cancelled
+        if (isCancelledRecordingRef.current) {
+          isCancelledRecordingRef.current = false;
+          return;
+        }
+
         const audioBlob = new Blob(audioChunksRef.current, {
           type: actualMimeType,
         });
@@ -314,17 +323,21 @@ export function ChatInput({
 
   const cancelRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
+      // Set flag before stopping to prevent onstop from creating attachment
+      isCancelledRecordingRef.current = true;
       audioChunksRef.current = [];
+
+      // Stop all tracks first
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
+
+      mediaRecorderRef.current.stop();
       setIsRecording(false);
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
         recordingIntervalRef.current = null;
       }
-      // Stop all tracks without saving
-      mediaRecorderRef.current.stream
-        .getTracks()
-        .forEach((track) => track.stop());
     }
   };
 

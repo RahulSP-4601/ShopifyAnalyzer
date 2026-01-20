@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadFile, STORAGE_BUCKET, supabase } from "@/lib/supabase";
+import { getStore } from "@/lib/auth/session";
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const store = await getStore();
+    if (!store) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     if (!supabase) {
       return NextResponse.json(
         {
@@ -59,11 +69,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate unique path
+    // Generate unique path scoped to store ID
     const timestamp = Date.now();
-    const randomId = Math.random().toString(36).substring(2, 9);
+    const randomId = Math.random().toString(36).substring(2, 11);
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const path = `uploads/${timestamp}-${randomId}-${sanitizedName}`;
+    const path = `stores/${store.id}/${timestamp}-${randomId}-${sanitizedName}`;
 
     // Upload to Supabase Storage
     const { url, error } = await uploadFile(file, path);
