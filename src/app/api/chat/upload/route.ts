@@ -1,15 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadFile, STORAGE_BUCKET, supabase } from "@/lib/supabase";
-import { getStore } from "@/lib/auth/session";
+import { getUserSession } from "@/lib/auth/session";
+import { checkSubscription } from "@/lib/auth/subscription";
 
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const store = await getStore();
-    if (!store) {
+    const session = await getUserSession();
+    if (!session) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
+      );
+    }
+
+    // Check for active subscription
+    const { hasActiveSubscription } = await checkSubscription();
+
+    if (!hasActiveSubscription) {
+      return NextResponse.json(
+        { error: "Active subscription required", code: "SUBSCRIPTION_REQUIRED" },
+        { status: 403 }
       );
     }
 
@@ -69,11 +80,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate unique path scoped to store ID
+    // Generate unique path scoped to user ID
     const timestamp = Date.now();
     const randomId = Math.random().toString(36).substring(2, 11);
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const path = `stores/${store.id}/${timestamp}-${randomId}-${sanitizedName}`;
+    const path = `users/${session.userId}/${timestamp}-${randomId}-${sanitizedName}`;
 
     // Upload to Supabase Storage
     const { url, error } = await uploadFile(file, path);

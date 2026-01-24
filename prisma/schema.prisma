@@ -10,11 +10,143 @@ datasource db {
 }
 
 // ============================================
-// STORE & AUTH
+// USER & AUTH
+// ============================================
+
+model User {
+  id String @id @default(cuid())
+
+  // Profile information
+  name     String
+  email    String  @unique
+  phone    String?
+  city     String?
+  state    String?
+  zipCode  String?
+  country  String?
+
+  // Authentication
+  passwordHash String
+
+  // Password reset (stores hashed token for security)
+  resetTokenHash   String?   @unique
+  resetTokenExpiry DateTime?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  stores           Store[]
+  subscription     Subscription?
+  marketplaceConns MarketplaceConnection[]
+
+  @@index([email])
+}
+
+// ============================================
+// MARKETPLACE CONNECTIONS
+// ============================================
+
+model MarketplaceConnection {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  marketplace MarketplaceType
+  status      ConnectionStatus @default(PENDING)
+
+  // OAuth tokens - SECURITY: These fields MUST be encrypted at rest using application-layer encryption.
+  // Use @/lib/auth/encryption helpers (encryptToken/decryptToken) for all reads/writes.
+  // Never store plaintext tokens. Consider migrating to a secrets manager for production.
+  accessToken  String? // Encrypted OAuth access token - use encryptToken() before write, decryptToken() after read
+  refreshToken String? // Encrypted OAuth refresh token - use encryptToken() before write, decryptToken() after read
+  tokenExpiry  DateTime? // Token expiration timestamp (not encrypted, used for refresh scheduling)
+
+  // Marketplace-specific data
+  externalId   String?
+  externalName String?
+
+  // Timestamps
+  connectedAt DateTime?
+  lastSyncAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, marketplace])
+  @@index([userId])
+}
+
+enum MarketplaceType {
+  SHOPIFY
+  AMAZON
+  EBAY
+  FLIPKART
+  AMAZON_INDIA
+  MEESHO
+  MYNTRA
+  NYKAA
+  SNAPDEAL
+  TIKTOK_SHOP
+}
+
+enum ConnectionStatus {
+  PENDING
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+// ============================================
+// SUBSCRIPTION
+// ============================================
+
+model Subscription {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  status SubscriptionStatus @default(ACTIVE)
+
+  // Pricing
+  basePrice       Decimal @default(19.99) @db.Decimal(10, 2)
+  additionalPrice Decimal @default(4.99) @db.Decimal(10, 2)
+  totalPrice      Decimal @default(19.99) @db.Decimal(10, 2)
+
+  // Connected marketplaces count for billing
+  marketplaceCount Int @default(1)
+
+  // Billing cycle
+  currentPeriodStart DateTime @default(now())
+  currentPeriodEnd   DateTime @default(dbgenerated("(NOW() + '30 days'::interval)")) // Default to 30 days from creation
+
+  // Payment info (for Stripe integration later)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+// ============================================
+// STORE (Shopify Connection)
 // ============================================
 
 model Store {
   id String @id @default(cuid())
+
+  // Link to User
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Shopify identifiers
   shopifyId String  @unique
@@ -25,7 +157,7 @@ model Store {
   timezone  String  @default("UTC")
 
   // Auth
-  accessToken String
+  accessToken String? // Nullable to allow clearing on disconnect
   scope       String
 
   // Sync status
@@ -46,6 +178,8 @@ model Store {
   conversations Conversation[]
   reports       Report[]
   syncLogs      SyncLog[]
+
+  @@index([userId])
 }
 
 enum SyncStatus {

@@ -313,9 +313,9 @@ export function Integrations() {
                 <Image
                   src="/logo.png"
                   alt="ShopIQ"
-                  width={100}
-                  height={100}
-                  className="w-20 h-20 md:w-24 md:h-24 object-contain relative z-10"
+                  width={130}
+                  height={130}
+                  className="w-32 h-32 md:w-36 md:h-36 object-contain relative z-10"
                   priority
                 />
               </div>

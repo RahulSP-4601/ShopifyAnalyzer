@@ -7,9 +7,14 @@ const FETCH_TIMEOUT_MS = 30000; // 30 second timeout for API calls
 
 export class ShopifyClient {
   private store: Store;
+  private accessToken: string;
 
   constructor(store: Store) {
+    if (!store.accessToken) {
+      throw new Error("Store access token is required for API calls");
+    }
     this.store = store;
+    this.accessToken = store.accessToken;
   }
 
   private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -22,7 +27,7 @@ export class ShopifyClient {
         ...options,
         signal: controller.signal,
         headers: {
-          "X-Shopify-Access-Token": this.store.accessToken,
+          "X-Shopify-Access-Token": this.accessToken,
           "Content-Type": "application/json",
           ...options?.headers,
         },
@@ -68,7 +73,7 @@ export class ShopifyClient {
         {
           signal: controller.signal,
           headers: {
-            "X-Shopify-Access-Token": this.store.accessToken,
+            "X-Shopify-Access-Token": this.accessToken,
             "Content-Type": "application/json",
           },
         }
@@ -115,7 +120,7 @@ export class ShopifyClient {
         {
           signal: controller.signal,
           headers: {
-            "X-Shopify-Access-Token": this.store.accessToken,
+            "X-Shopify-Access-Token": this.accessToken,
             "Content-Type": "application/json",
           },
         }
@@ -176,7 +181,7 @@ export class ShopifyClient {
         {
           signal: controller.signal,
           headers: {
-            "X-Shopify-Access-Token": this.store.accessToken,
+            "X-Shopify-Access-Token": this.accessToken,
             "Content-Type": "application/json",
           },
         }

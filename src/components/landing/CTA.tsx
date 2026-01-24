@@ -16,7 +16,7 @@ const plans = [
       "Email support",
     ],
     cta: "Get Started Free",
-    href: "/connect",
+    href: "/signup",
     featured: false,
     color: "from-slate-600 to-slate-700",
     checkColor: "text-teal-500",
@@ -36,7 +36,7 @@ const plans = [
       "Custom alerts",
     ],
     cta: "Start 14-Day Free Trial",
-    href: "/connect",
+    href: "/signup",
     featured: true,
     color: "from-teal-500 to-emerald-500",
     checkColor: "text-teal-400",
@@ -201,7 +201,7 @@ export function CTA() {
               {/* CTA buttons */}
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="/connect"
+                  href="/signup"
                   className="group flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-8 text-sm font-semibold text-white transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/25"
                 >
                   Start Free Trial

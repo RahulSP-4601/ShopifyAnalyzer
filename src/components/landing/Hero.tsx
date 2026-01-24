@@ -44,7 +44,7 @@ export function Hero() {
           {/* CTA buttons */}
           <div className="fade-up mt-10 flex flex-col sm:flex-row items-center gap-4">
             <Link
-              href="/connect"
+              href="/signup"
               className="group flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 text-sm font-medium text-white hover:from-teal-600 hover:to-emerald-600 transition-all duration-200 shadow-lg shadow-teal-500/25"
             >
               Start Free Trial

@@ -5,9 +5,10 @@ import {
   validateHmac,
   validateShopDomain,
   exchangeCodeForToken,
+  encryptToken,
 } from "@/lib/shopify/oauth";
 import { ShopifyClient } from "@/lib/shopify/client";
-import { createSession } from "@/lib/auth/session";
+import { getUserSession } from "@/lib/auth/session";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -53,12 +54,33 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Check if user is logged in
+    const session = await getUserSession();
+    if (!session) {
+      // User must be authenticated before OAuth flow
+      // Store only the shop domain (not the code) so they can restart after login
+      // Reuse cookieStore from above instead of redeclaring
+      cookieStore.set("pending_shopify_shop", shop, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 10, // 10 minutes
+        path: "/",
+      });
+      // Do NOT store the OAuth code - it's a one-time use token and storing it is insecure
+      // User will need to restart the OAuth flow after signing in
+      return NextResponse.redirect(
+        new URL("/signin?redirect=/onboarding/connect&shopify_restart=true", request.url)
+      );
+    }
+
     // Exchange code for access token
     const { accessToken, scope } = await exchangeCodeForToken(shop, code);
 
     // Create a temporary store object to fetch shop info
     const tempStore = {
       id: "",
+      userId: session.userId,
       domain: shop,
       accessToken,
       shopifyId: "",
@@ -83,6 +105,7 @@ export async function GET(request: NextRequest) {
     const store = await prisma.store.upsert({
       where: { domain: shop },
       create: {
+        userId: session.userId,
         shopifyId: String(shopInfo.id),
         domain: shop,
         name: shopInfo.name,
@@ -94,6 +117,7 @@ export async function GET(request: NextRequest) {
         syncStatus: "PENDING",
       },
       update: {
+        userId: session.userId,
         accessToken,
         scope,
         name: shopInfo.name,
@@ -103,14 +127,37 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Create session
-    await createSession({
-      storeId: store.id,
-      domain: store.domain,
+    // Encrypt access token before storing for security
+    const encryptedAccessToken = encryptToken(accessToken);
+
+    // Create or update marketplace connection
+    await prisma.marketplaceConnection.upsert({
+      where: {
+        userId_marketplace: {
+          userId: session.userId,
+          marketplace: "SHOPIFY",
+        },
+      },
+      create: {
+        userId: session.userId,
+        marketplace: "SHOPIFY",
+        status: "CONNECTED",
+        accessToken: encryptedAccessToken,
+        externalId: String(shopInfo.id),
+        externalName: shopInfo.name,
+        connectedAt: new Date(),
+      },
+      update: {
+        status: "CONNECTED",
+        accessToken: encryptedAccessToken,
+        externalId: String(shopInfo.id),
+        externalName: shopInfo.name,
+        connectedAt: new Date(),
+      },
     });
 
-    // Redirect to sync page
-    return NextResponse.redirect(new URL("/sync", request.url));
+    // Redirect back to onboarding connect page to allow connecting more marketplaces
+    return NextResponse.redirect(new URL("/onboarding/connect", request.url));
   } catch (error) {
     console.error("OAuth callback error:", error);
     return NextResponse.redirect(

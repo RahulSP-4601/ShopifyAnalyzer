@@ -23,21 +23,22 @@ export function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/" className="flex items-center gap-3 group">
           <Image
             src="/logo.png"
             alt="ShopIQ"
-            width={36}
-            height={36}
+            width={82}
+            height={82}
             className="transition-transform duration-200 group-hover:scale-105"
+            priority
           />
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-slate-900 tracking-tight">
+            <span className="text-xl font-bold text-slate-900 tracking-tight">
               ShopIQ
             </span>
-            <span className="text-[10px] text-teal-600 font-semibold tracking-wide uppercase -mt-0.5">
+            <span className="text-[11px] text-teal-600 font-semibold tracking-wider uppercase -mt-0.5">
               Analytics
             </span>
           </div>
@@ -72,14 +73,14 @@ export function Navbar() {
           </div>
 
           <Link
-            href="/chat"
+            href="/signin"
             className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
           >
             Sign in
           </Link>
 
           <Link
-            href="/connect"
+            href="/signup"
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-teal-500 to-emerald-500 rounded-lg hover:from-teal-600 hover:to-emerald-600 transition-all duration-200 shadow-lg shadow-teal-500/25"
           >
             Get Started

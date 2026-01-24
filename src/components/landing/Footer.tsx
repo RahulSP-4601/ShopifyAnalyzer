@@ -88,8 +88,8 @@ export function Footer() {
               <Image
                 src="/logo.png"
                 alt="ShopIQ"
-                width={36}
-                height={36}
+                width={82}
+                height={82}
                 className="transition-transform duration-200 group-hover:scale-105"
               />
               <div className="flex flex-col">

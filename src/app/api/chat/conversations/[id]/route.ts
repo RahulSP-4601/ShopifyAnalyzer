@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStore } from "@/lib/auth/session";
+import { getUserSession } from "@/lib/auth/session";
+import { checkSubscription } from "@/lib/auth/subscription";
 import prisma from "@/lib/prisma";
 
 export async function GET(
@@ -7,16 +8,33 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const store = await getStore();
+    const session = await getUserSession();
 
-    if (!store) {
+    if (!session) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    // Check for active subscription
+    const { hasActiveSubscription } = await checkSubscription();
+
+    if (!hasActiveSubscription) {
+      return NextResponse.json(
+        { error: "Active subscription required", code: "SUBSCRIPTION_REQUIRED" },
+        { status: 403 }
+      );
     }
 
     const { id } = await params;
 
+    // Get user's stores
+    const userStores = await prisma.store.findMany({
+      where: { userId: session.userId },
+      select: { id: true },
+    });
+    const storeIds = userStores.map((s) => s.id);
+
     const conversation = await prisma.conversation.findFirst({
-      where: { id, storeId: store.id },
+      where: { id, storeId: { in: storeIds.length > 0 ? storeIds : ["none"] } },
       include: {
         messages: {
           orderBy: { createdAt: "asc" },
@@ -67,17 +85,34 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const store = await getStore();
+    const session = await getUserSession();
 
-    if (!store) {
+    if (!session) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    // Check for active subscription
+    const { hasActiveSubscription } = await checkSubscription();
+
+    if (!hasActiveSubscription) {
+      return NextResponse.json(
+        { error: "Active subscription required", code: "SUBSCRIPTION_REQUIRED" },
+        { status: 403 }
+      );
     }
 
     const { id } = await params;
 
-    // Verify conversation belongs to store
+    // Get user's stores
+    const userStores = await prisma.store.findMany({
+      where: { userId: session.userId },
+      select: { id: true },
+    });
+    const storeIds = userStores.map((s) => s.id);
+
+    // Verify conversation belongs to user's store
     const conversation = await prisma.conversation.findFirst({
-      where: { id, storeId: store.id },
+      where: { id, storeId: { in: storeIds.length > 0 ? storeIds : ["none"] } },
     });
 
     if (!conversation) {
