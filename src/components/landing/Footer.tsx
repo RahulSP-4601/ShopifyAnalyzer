@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useCookieConsent } from "@/hooks/useCookieConsent";
 
 const footerLinks = {
   product: {
@@ -77,6 +78,8 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const { openPreferences } = useCookieConsent();
+
   return (
     <footer className="bg-white border-t border-slate-100">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -147,9 +150,17 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="py-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-slate-400">
-            &copy; {new Date().getFullYear()} ShopIQ. All rights reserved.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-slate-400">
+              &copy; {new Date().getFullYear()} ShopIQ. All rights reserved.
+            </p>
+            <button
+              onClick={openPreferences}
+              className="text-sm text-slate-400 transition-colors hover:text-slate-600"
+            >
+              Cookie Settings
+            </button>
+          </div>
 
           {/* Trust badges */}
           <div className="flex items-center gap-3">

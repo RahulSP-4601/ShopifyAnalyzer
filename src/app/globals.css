@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../components/landing/animations.css";
 
 :root {
   /* Premium color palette */

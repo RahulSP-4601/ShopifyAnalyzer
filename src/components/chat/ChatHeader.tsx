@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 
 interface ChatHeaderProps {
@@ -129,7 +130,7 @@ export function ChatHeader({
     <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-5">
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <a href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/logo.png"
             alt="ShopIQ"
@@ -139,7 +140,7 @@ export function ChatHeader({
             priority
           />
           <span className="text-xl font-bold text-slate-900">ShopIQ</span>
-        </a>
+        </Link>
       </div>
 
       {/* Right side - User profile */}

@@ -1,31 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUserSession } from "@/lib/auth/session";
 import { calculateMonthlyPrice, PRICING } from "@/lib/subscription/pricing";
 
-const updateSubscriptionSchema = z.object({
-  marketplaceCount: z.number().min(1, "At least 1 marketplace is required"),
-});
-
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const session = await getUserSession();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const body = await request.json();
-    const result = updateSubscriptionSchema.safeParse(body);
-
-    if (!result.success) {
-      return NextResponse.json(
-        { error: result.error.issues[0].message },
-        { status: 400 }
-      );
-    }
-
-    const { marketplaceCount } = result.data;
 
     // Check if subscription exists
     const existingSubscription = await prisma.subscription.findUnique({
@@ -39,16 +22,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Calculate new pricing
-    const totalPrice = calculateMonthlyPrice(marketplaceCount);
+    // Query the ACTUAL connected marketplace count from database
+    // Don't trust client-supplied count to prevent underbilling
+    const actualMarketplaceCount = await prisma.marketplaceConnection.count({
+      where: {
+        userId: session.userId,
+        status: "CONNECTED",
+      },
+    });
 
-    // Update subscription with fresh price values to avoid stale data
-    // Store unit prices (basePrice, additionalPrice) for consistency with create route
+    if (actualMarketplaceCount < 1) {
+      return NextResponse.json(
+        { error: "At least 1 connected marketplace is required" },
+        { status: 400 }
+      );
+    }
+
+    // Calculate pricing based on authoritative count
+    const totalPrice = calculateMonthlyPrice(actualMarketplaceCount);
+
+    // Update subscription with verified marketplace count
     const subscription = await prisma.subscription.update({
       where: { userId: session.userId },
       data: {
         totalPrice,
-        marketplaceCount,
+        marketplaceCount: actualMarketplaceCount,
         basePrice: PRICING.BASE_PRICE,
         additionalPrice: PRICING.ADDITIONAL_PRICE,
       },

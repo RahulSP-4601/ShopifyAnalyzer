@@ -4,26 +4,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { PRICING } from "@/lib/subscription/pricing";
+import { MARKETPLACE_NAMES } from "@/lib/marketplace/config";
+import { MarketplaceType } from "@prisma/client";
 
 interface Connection {
   id: string;
-  marketplace: string;
+  marketplace: MarketplaceType;
   status: string;
   externalName?: string;
 }
-
-const MARKETPLACE_NAMES: Record<string, string> = {
-  SHOPIFY: "Shopify",
-  AMAZON: "Amazon",
-  EBAY: "eBay",
-  FLIPKART: "Flipkart",
-  AMAZON_INDIA: "Amazon India",
-  MEESHO: "Meesho",
-  MYNTRA: "Myntra",
-  NYKAA: "Nykaa",
-  SNAPDEAL: "Snapdeal",
-  TIKTOK_SHOP: "TikTok Shop",
-};
 
 // Centralized demo mode check
 const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";

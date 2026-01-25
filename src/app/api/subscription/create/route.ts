@@ -45,6 +45,21 @@ export async function POST(request: NextRequest) {
     const targetDay = Math.min(day, lastDayOfNextMonth);
     const currentPeriodEnd = new Date(year, month + 1, targetDay);
 
+    // Check current subscription status before updating
+    // Don't reactivate CANCELED subscriptions automatically
+    const existingSubscription = await prisma.subscription.findUnique({
+      where: { userId: session.userId },
+      select: { status: true },
+    });
+
+    // Block updates if subscription is CANCELED
+    if (existingSubscription?.status === "CANCELED") {
+      return NextResponse.json(
+        { error: "Cannot modify a canceled subscription. Please contact support to reactivate." },
+        { status: 400 }
+      );
+    }
+
     // Create or update subscription
     // On update, preserve existing billing period (don't reset currentPeriodStart/End)
     const subscription = await prisma.subscription.upsert({
@@ -60,11 +75,11 @@ export async function POST(request: NextRequest) {
         currentPeriodEnd,
       },
       update: {
-        status: "ACTIVE",
         basePrice: PRICING.BASE_PRICE,
         additionalPrice: PRICING.ADDITIONAL_PRICE,
         totalPrice,
         marketplaceCount,
+        // Don't update status to preserve cancelled/expired state
         // Don't update currentPeriodStart/currentPeriodEnd to preserve billing cycle
       },
     });

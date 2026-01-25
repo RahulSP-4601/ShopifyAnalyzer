@@ -109,10 +109,11 @@ export async function POST(request: NextRequest) {
       try {
         await prisma.user.delete({ where: { id: user.id } });
       } catch (deleteError) {
-        // Log the deletion failure with user details for manual cleanup
+        // Log the deletion failure with sanitized error for manual cleanup
+        // Avoid logging email to prevent sensitive data leakage
+        const deleteErrorMessage = deleteError instanceof Error ? deleteError.message : "Unknown error";
         console.error(
-          `Rollback failed: could not delete orphaned user (id: ${user.id}, email: ${user.email}):`,
-          deleteError
+          `Rollback failed: could not delete orphaned user (id: ${user.id}): ${deleteErrorMessage}`
         );
         return NextResponse.json(
           { error: "Account creation failed and rollback unsuccessful. Please contact support." },

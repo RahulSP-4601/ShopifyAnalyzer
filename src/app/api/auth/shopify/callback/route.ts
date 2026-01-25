@@ -98,10 +98,15 @@ export async function GET(request: NextRequest) {
       updatedAt: new Date(),
     };
 
-    const client = new ShopifyClient(tempStore);
+    // Pass isEncrypted=false since tempStore has plaintext token (not from database)
+    const client = new ShopifyClient(tempStore, false);
     const shopInfo = await client.getShopInfo();
 
-    // Create or update store in database
+    // Encrypt access token before storing for security
+    // Must be done before any database writes to avoid plaintext storage
+    const encryptedAccessToken = encryptToken(accessToken);
+
+    // Create or update store in database with encrypted token
     const store = await prisma.store.upsert({
       where: { domain: shop },
       create: {
@@ -112,13 +117,13 @@ export async function GET(request: NextRequest) {
         email: shopInfo.email,
         currency: shopInfo.currency,
         timezone: shopInfo.iana_timezone || shopInfo.timezone,
-        accessToken,
+        accessToken: encryptedAccessToken,
         scope,
         syncStatus: "PENDING",
       },
       update: {
         userId: session.userId,
-        accessToken,
+        accessToken: encryptedAccessToken,
         scope,
         name: shopInfo.name,
         email: shopInfo.email,
@@ -126,9 +131,6 @@ export async function GET(request: NextRequest) {
         timezone: shopInfo.iana_timezone || shopInfo.timezone,
       },
     });
-
-    // Encrypt access token before storing for security
-    const encryptedAccessToken = encryptToken(accessToken);
 
     // Create or update marketplace connection
     await prisma.marketplaceConnection.upsert({
