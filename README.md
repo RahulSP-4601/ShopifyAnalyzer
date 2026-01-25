@@ -4,7 +4,7 @@ ShopIQ is an intelligent analytics platform that transforms complex e-commerce d
 
 ## The Problem We Solve
 
-Multi-channel e-commerce sellers face a growing challenge: managing data across multiple platforms (Shopify, Amazon, eBay, Flipkart, and more) is overwhelming. Each marketplace has its own dashboard, metrics, and reporting tools. Sellers spend hours jumping between platforms, manually compiling reports, and trying to make sense of fragmented data.
+Multi-channel e-commerce sellers face a growing challenge: managing data across multiple platforms (Shopify, Amazon, eBay, Etsy, WooCommerce, and more) is overwhelming. Each marketplace has its own dashboard, metrics, and reporting tools. Sellers spend hours jumping between platforms, manually compiling reports, and trying to make sense of fragmented data.
 
 **The result?** Lost time, missed opportunities, and decisions made on gut feeling instead of data.
 
@@ -34,13 +34,15 @@ We democratize e-commerce analytics for the millions of small and medium sellers
 | Marketplace | Status |
 | ----------- | ------ |
 | Shopify | Fully Integrated |
-| Amazon | Coming Soon |
+| Amazon Seller Central | Coming Soon |
 | eBay | Coming Soon |
-| Flipkart | Coming Soon |
-| Amazon India | Coming Soon |
-| Meesho | Coming Soon |
-| Myntra | Coming Soon |
-| Nykaa | Coming Soon |
+| Etsy | Coming Soon |
+| WooCommerce | Coming Soon |
+| BigCommerce | Coming Soon |
+| Wix eCommerce | Coming Soon |
+| Square Online | Coming Soon |
+| Magento (Adobe Commerce) | Coming Soon |
+| PrestaShop | Coming Soon |
 
 ## Features
 
@@ -135,8 +137,8 @@ ShopIQ operates on a **subscription-based SaaS model** with transparent, scalabl
 
 ### Target Market
 
-- **Primary:** Multi-channel e-commerce sellers on Shopify
-- **Secondary:** Indian marketplace sellers (Flipkart, Amazon India, Meesho)
+- **Primary:** Multi-channel e-commerce sellers on Shopify, WooCommerce, and BigCommerce
+- **Secondary:** Marketplace sellers on Amazon, eBay, and Etsy
 - **TAM:** 30M+ active e-commerce sellers globally
 - **Sweet Spot:** Sellers doing $10K-$500K/month who need insights but can't afford dedicated analysts
 
