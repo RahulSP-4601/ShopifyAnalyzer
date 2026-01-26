@@ -422,7 +422,7 @@ export default function AccountMarketplacesPage() {
 
       {/* Header */}
       <header className="relative z-10 border-b border-slate-200 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-xl blur opacity-25 group-hover:opacity-40 transition-opacity" />
@@ -464,13 +464,13 @@ export default function AccountMarketplacesPage() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-6 py-8">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
             Manage Marketplaces
           </h1>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-1 sm:mt-2 text-sm sm:text-base text-slate-600">
             Connect or disconnect your e-commerce platforms
           </p>
         </div>
@@ -482,10 +482,10 @@ export default function AccountMarketplacesPage() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Marketplaces Grid */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6">
+          <div className="lg:col-span-2 order-2 lg:order-1">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-4 sm:p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-slate-900">
                   Your Marketplaces
@@ -495,7 +495,7 @@ export default function AccountMarketplacesPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 {MARKETPLACES.map((marketplace) => {
                   const connected = isConnected(marketplace.id);
                   const isCurrentLoading = loading === marketplace.id;
@@ -579,8 +579,8 @@ export default function AccountMarketplacesPage() {
           </div>
 
           {/* Subscription Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6 sticky top-6">
+          <div className="lg:col-span-1 order-1 lg:order-2">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-4 sm:p-6 lg:sticky lg:top-6">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">
                 Subscription
               </h2>

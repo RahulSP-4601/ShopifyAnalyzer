@@ -415,7 +415,7 @@ export function ChatInput({
     <form onSubmit={handleSubmit} className="relative">
       {/* Attachments Preview */}
       {attachments.length > 0 && (
-        <div className="mb-2 flex flex-wrap gap-2">
+        <div className="mb-2 flex flex-wrap gap-2 max-w-full">
           {attachments.map((attachment) => (
             <div
               key={attachment.id}
@@ -449,7 +449,7 @@ export function ChatInput({
                   <audio
                     key={attachment.id}
                     controls
-                    className="h-8 w-32"
+                    className="h-8 w-24 sm:w-32"
                     preload="metadata"
                   >
                     <source src={attachment.url} type={attachment.mimeType} />
@@ -554,7 +554,7 @@ export function ChatInput({
         </div>
       )}
 
-      <div className="flex items-end gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
+      <div className="flex items-end gap-1.5 sm:gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
         {/* File Attachment Button */}
         <input
           ref={fileInputRef}
@@ -568,7 +568,7 @@ export function ChatInput({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled || isRecording || isUploading}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex h-10 w-10 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           title="Attach file"
         >
           <svg
@@ -591,7 +591,7 @@ export function ChatInput({
           type="button"
           onClick={isRecording ? stopRecording : startRecording}
           disabled={disabled || isUploading}
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
+          className={`flex h-10 w-10 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl transition-colors ${
             isRecording
               ? "bg-red-100 text-red-600 hover:bg-red-200"
               : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
@@ -643,12 +643,12 @@ export function ChatInput({
           placeholder={uploadProgress || placeholder}
           disabled={disabled || isRecording || isUploading}
           rows={1}
-          className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none disabled:opacity-50 overflow-hidden hide-scrollbar"
+          className="flex-1 resize-none bg-transparent px-2 py-1.5 text-base sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none disabled:opacity-50 overflow-hidden hide-scrollbar min-w-0"
         />
         <button
           type="submit"
           disabled={disabled || isUploading || (!message.trim() && attachments.length === 0)}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white transition-all hover:from-emerald-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex h-10 w-10 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white transition-all hover:from-emerald-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isUploading ? (
             <svg
@@ -687,7 +687,7 @@ export function ChatInput({
           )}
         </button>
       </div>
-      <p className="mt-2 text-center text-xs text-slate-400">
+      <p className="mt-2 text-center text-xs text-slate-400 hidden sm:block">
         Press Enter to send, Shift+Enter for new line
       </p>
     </form>

@@ -2,8 +2,7 @@ import { redirect } from "next/navigation";
 import { getUserWithMarketplaces } from "@/lib/auth/session";
 import { checkSubscription } from "@/lib/auth/subscription";
 import { ChatContainer } from "@/components/chat";
-import { ChatSidebar } from "@/components/chat/ChatSidebar";
-import { ChatHeader } from "@/components/chat/ChatHeader";
+import { ChatLayout } from "@/components/chat/ChatLayout";
 
 export const runtime = "nodejs";
 
@@ -32,34 +31,19 @@ export default async function ChatPage() {
   }
 
   return (
-    <div className="flex h-screen bg-white">
-      {/* Sidebar */}
-      <ChatSidebar
-        userName={user.name ?? ""}
-        userEmail={user.email ?? ""}
-        connectedMarketplaces={connectedMarketplaces.map((m) => ({
-          marketplace: m.marketplace,
-          name: m.externalName || m.marketplace,
-        }))}
+    <ChatLayout
+      userName={user.name ?? ""}
+      userEmail={user.email ?? ""}
+      connectedMarketplaces={connectedMarketplaces.map((m) => ({
+        marketplace: m.marketplace,
+        name: m.externalName || m.marketplace,
+      }))}
+      marketplaceCount={connectedMarketplaces?.length ?? 0}
+    >
+      <ChatContainer
+        storeName={connectedMarketplaces[0]?.externalName || "your store"}
+        isConnected={true}
       />
-
-      {/* Main chat area */}
-      <div className="flex flex-1 flex-col">
-        {/* Header with user profile */}
-        <ChatHeader
-          userName={user.name ?? ""}
-          userEmail={user.email ?? ""}
-          marketplaceCount={connectedMarketplaces?.length ?? 0}
-        />
-
-        {/* Chat container */}
-        <main className="flex-1 overflow-hidden">
-          <ChatContainer
-            storeName={connectedMarketplaces[0]?.externalName || "your store"}
-            isConnected={true}
-          />
-        </main>
-      </div>
-    </div>
+    </ChatLayout>
   );
 }

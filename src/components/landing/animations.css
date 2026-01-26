@@ -460,3 +460,76 @@
 .animate-modal-in {
   animation: modalIn 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+/* ==================== Mobile Navigation Menu Animations ==================== */
+
+/* Mobile menu slide down animation */
+@keyframes menuSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-menu-slide-down {
+  animation: menuSlideDown 0.2s ease-out forwards;
+}
+
+/* ==================== Reduced Motion Accessibility ==================== */
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all animations */
+  .fade-up,
+  .animate-float,
+  .animate-glow,
+  .animate-gradient,
+  .animate-draw,
+  .animate-shimmer,
+  .animate-blink,
+  .animate-scale-in,
+  .animate-spin-slow,
+  .animate-reverse-spin,
+  .animate-ping-slow,
+  .animate-pulse-slow,
+  .animate-pulse-slower,
+  .hub-glow,
+  .animate-gradient-x,
+  .marketplace-node-premium,
+  .orbital-ring,
+  .energy-particle,
+  .wire-glow-path,
+  .animate-slide-up,
+  .animate-slide-down,
+  .animate-modal-in,
+  .animate-menu-slide-down {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Ensure fade-up elements are visible without animation */
+  .fade-up {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  /* Marketplace nodes should be visible immediately */
+  .marketplace-node-premium {
+    opacity: 1 !important;
+  }
+
+  /* Disable spinning animations */
+  .animate-spin,
+  .animate-ping {
+    animation: none !important;
+  }
+
+  /* Reduce transition durations for essential interactions */
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}

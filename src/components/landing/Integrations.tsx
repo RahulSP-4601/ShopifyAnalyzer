@@ -194,14 +194,16 @@ export function Integrations() {
         </div>
 
         {/* Integration Hub Visualization */}
-        <div className="fade-up flex justify-center">
-          <div
-            className="relative"
-            style={{
-              width: `${hubSize.width}px`,
-              height: `${hubSize.height}px`,
-            }}
-          >
+        <div className="fade-up flex justify-center overflow-hidden -mb-[280px] sm:-mb-[200px] md:-mb-[100px] lg:-mb-[50px] xl:mb-0">
+          {/* Responsive scaling wrapper */}
+          <div className="transform scale-[0.42] sm:scale-[0.55] md:scale-[0.7] lg:scale-[0.85] xl:scale-100 origin-top transition-transform duration-300">
+            <div
+              className="relative"
+              style={{
+                width: `${hubSize.width}px`,
+                height: `${hubSize.height}px`,
+              }}
+            >
             {/* Orbital rings */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-[600px] h-[600px] rounded-full border border-slate-200/50 absolute animate-spin-slow" style={{ animationDuration: '60s' }} />
@@ -383,6 +385,7 @@ export function Integrations() {
                 </div>
               );
             })}
+          </div>
           </div>
         </div>
 

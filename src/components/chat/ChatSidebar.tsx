@@ -24,12 +24,16 @@ interface ChatSidebarProps {
   userName: string;
   userEmail: string;
   connectedMarketplaces: ConnectedMarketplace[];
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 export function ChatSidebar({
   userName,
   userEmail,
   connectedMarketplaces,
+  isOpen = false,
+  onClose,
 }: ChatSidebarProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,8 +59,14 @@ export function ChatSidebar({
   };
 
   const startNewChat = () => {
+    onClose?.();
     router.push("/chat");
     router.refresh();
+  };
+
+  const navigateTo = (path: string) => {
+    onClose?.();
+    router.push(path);
   };
 
   // Get user initials - handle empty/malformed userName defensively
@@ -70,9 +80,24 @@ export function ChatSidebar({
       .slice(0, 2) || "?";
 
   return (
-    <aside className="flex w-72 flex-col border-r border-slate-200 bg-slate-50">
+    <aside
+      className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-slate-200 bg-slate-50 transform transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
+      {/* Mobile Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute right-2 top-2 p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 lg:hidden transition-colors"
+        aria-label="Close sidebar"
+      >
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
       {/* Header - User Info */}
-      <div className="border-b border-slate-200 p-4">
+      <div className="border-b border-slate-200 p-4 pt-12 lg:pt-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-emerald-600 text-sm font-semibold text-white">
             {initials}
@@ -174,7 +199,7 @@ export function ChatSidebar({
             {conversations.map((conversation) => (
               <button
                 key={conversation.id}
-                onClick={() => router.push(`/chat/${conversation.id}`)}
+                onClick={() => navigateTo(`/chat/${conversation.id}`)}
                 className="w-full rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-100"
               >
                 <p className="text-sm text-slate-700 truncate">
@@ -192,7 +217,7 @@ export function ChatSidebar({
       {/* Footer */}
       <div className="border-t border-slate-200 p-3 space-y-1">
         <button
-          onClick={() => router.push("/account/marketplaces")}
+          onClick={() => navigateTo("/account/marketplaces")}
           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-teal-600 font-medium transition-colors hover:bg-teal-50"
         >
           <svg
@@ -211,7 +236,7 @@ export function ChatSidebar({
           Connect More Accounts
         </button>
         <button
-          onClick={() => router.push("/reports")}
+          onClick={() => navigateTo("/reports")}
           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-600 transition-colors hover:bg-slate-100"
         >
           <svg

@@ -9,12 +9,14 @@ interface ChatHeaderProps {
   userName: string;
   userEmail: string;
   marketplaceCount: number;
+  onMenuToggle?: () => void;
 }
 
 export function ChatHeader({
   userName,
   userEmail,
   marketplaceCount,
+  onMenuToggle,
 }: ChatHeaderProps) {
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -127,27 +129,38 @@ export function ChatHeader({
       .slice(0, 2) || "?";
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-5">
-      {/* Logo */}
-      <div className="flex items-center gap-3">
-        <Link href="/" className="flex items-center gap-3">
+    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-4 sm:px-6 sm:py-5">
+      {/* Left side - Menu button and Logo */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Hamburger menu button - mobile only */}
+        <button
+          onClick={onMenuToggle}
+          className="p-2 rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden transition-colors"
+          aria-label="Open menu"
+        >
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <Link href="/" className="flex items-center gap-2 sm:gap-3">
           <Image
             src="/logo.png"
             alt="ShopIQ"
             width={62}
             height={62}
-            className="object-contain"
+            className="object-contain h-10 w-10 sm:h-[62px] sm:w-[62px]"
             priority
           />
-          <span className="text-xl font-bold text-slate-900">ShopIQ</span>
+          <span className="text-lg sm:text-xl font-bold text-slate-900 hidden xs:inline">ShopIQ</span>
         </Link>
       </div>
 
       {/* Right side - User profile */}
-      <div className="flex items-center gap-4">
-        {/* Connected badge - only show when marketplaces are connected */}
+      <div className="flex items-center gap-2 sm:gap-4">
+        {/* Connected badge - only show when marketplaces are connected, hide on mobile */}
         {marketplaceCount > 0 ? (
-          <div className="flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1.5 text-sm text-teal-700">
+          <div className="hidden sm:flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1.5 text-sm text-teal-700">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75"></span>
               <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-500"></span>
@@ -156,7 +169,7 @@ export function ChatHeader({
             connected
           </div>
         ) : (
-          <div className="flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-sm text-amber-700">
+          <div className="hidden sm:flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-sm text-amber-700">
             <span className="relative flex h-2 w-2">
               <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-400"></span>
             </span>

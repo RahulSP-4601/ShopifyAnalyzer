@@ -84,7 +84,7 @@ export function Footer() {
     <footer className="bg-white border-t border-slate-100">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Main footer content */}
-        <div className="py-16 grid grid-cols-2 gap-8 md:grid-cols-6">
+        <div className="py-10 sm:py-16 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:grid-cols-6">
           {/* Brand column */}
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2.5 group">
@@ -149,8 +149,8 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="py-6 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+        <div className="py-6 border-t border-slate-100 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
             <p className="text-sm text-slate-400">
               &copy; {new Date().getFullYear()} ShopIQ. All rights reserved.
             </p>
@@ -163,7 +163,7 @@ export function Footer() {
           </div>
 
           {/* Trust badges */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 sm:gap-3">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-xs text-slate-600">
               <svg
                 className="w-3.5 h-3.5 text-emerald-500"

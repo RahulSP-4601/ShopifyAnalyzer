@@ -104,7 +104,7 @@ export default function SignUpPage() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
               placeholder="John Doe"
             />
           </div>
@@ -124,7 +124,7 @@ export default function SignUpPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
               placeholder="you@example.com"
             />
           </div>
@@ -143,7 +143,7 @@ export default function SignUpPage() {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
               placeholder="+1 (555) 000-0000"
             />
           </div>
@@ -163,7 +163,7 @@ export default function SignUpPage() {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
                 placeholder="New York"
               />
             </div>
@@ -180,7 +180,7 @@ export default function SignUpPage() {
                 name="state"
                 value={formData.state}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
                 placeholder="NY"
               />
             </div>
@@ -201,7 +201,7 @@ export default function SignUpPage() {
                 name="zipCode"
                 value={formData.zipCode}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
                 placeholder="10001"
               />
             </div>
@@ -218,7 +218,7 @@ export default function SignUpPage() {
                 value={formData.country}
                 onChange={handleChange}
                 required
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all bg-white"
+                className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all bg-white"
               >
                 <option value="">Select...</option>
                 <option value="US">United States</option>
@@ -315,7 +315,7 @@ export default function SignUpPage() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
               placeholder="Confirm your password"
             />
           </div>
