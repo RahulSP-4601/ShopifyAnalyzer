@@ -25,57 +25,57 @@ From Forrest's "Three-Column Working Memory" paper, we structure ShopIQ's cognit
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    SHOPIQ WORKING MEMORY FOR SHOPIFY                         │
+│                    SHOPIQ WORKING MEMORY FOR SHOPIFY                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  COLUMN 1: ACTIVE TASKS (3-4 slots)                                         │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │ Task 1: "Analyze why Blue Ceramic Mug sales dropped 40%"            │   │
-│  │         State: executing | Priority: 0.9 | Started: 10 min ago      │   │
-│  │                                                                     │   │
-│  │ Task 2: "Generate weekly briefing for store owner"                  │   │
-│  │         State: awaiting_data | Priority: 0.7                        │   │
-│  │                                                                     │   │
-│  │ Task 3: "Check inventory levels for bestsellers"                    │   │
-│  │         State: complete | Priority: 0.6                             │   │
-│  │                                                                     │   │
-│  │ Slot 4: [empty - available for urgent task]                         │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                            │
-│  COLUMN 2: NOTES (TTL-based queue)                                         │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │ Note 1: "Review Facebook ad ROAS - seller mentioned yesterday"      │   │
-│  │         TTL: 4h remaining | Priority: 0.6 | Escalating...           │   │
-│  │                                                                     │   │
-│  │ Note 2: "Investigate high return rate on Women's Kurta Size L"      │   │
-│  │         TTL: 24h remaining | Priority: 0.5                          │   │
-│  │                                                                     │   │
-│  │ Note 3: "Seller wants to expand to Amazon - research later"         │   │
-│  │         TTL: 7 days | Priority: 0.3                                 │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                            │
-│  COLUMN 3: OBJECTS (Ambient Context)                                       │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │ PEOPLE:                                                             │   │
-│  │   - Store Owner: Priya (relationship: 0.92, prefers concise)        │   │
-│  │   - Supplier: Vendor X (relationship: 0.68, slow shipping)          │   │
-│  │                                                                     │   │
-│  │ ENTITIES:                                                           │   │
-│  │   - Store: "Priya's Ethnic Wear" (Shopify Plus, ₹45L/month)         │   │
-│  │   - Top Product: Blue Ceramic Mug (SKU: BCM-001, salience: 0.95)    │   │
-│  │   - Problem Category: Women's Kurta (high returns, salience: 0.88)  │   │
-│  │                                                                     │   │
-│  │ BELIEFS (strength > 0.8):                                           │   │
-│  │   - "Maharashtra customers prefer COD" (0.89)                       │   │
-│  │   - "Weekend sales spike 40% for ethnic wear" (0.92)                │   │
-│  │   - "Vendor X takes 12 days avg lead time" (0.85)                   │   │
-│  │                                                                     │   │
-│  │ TEMPORAL:                                                           │   │
-│  │   - Current: Month-end (urgency: 1.5x)                              │   │
-│  │   - Upcoming: Diwali season in 45 days                              │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                            │
-└────────────────────────────────────────────────────────────────────────────┘
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Task 1: "Analyze why Blue Ceramic Mug sales dropped 40%"            │    │
+│  │         State: executing | Priority: 0.9 | Started: 10 min ago      │    │
+│  │                                                                     │    │
+│  │ Task 2: "Generate weekly briefing for store owner"                  │    │
+│  │         State: awaiting_data | Priority: 0.7                        │    │
+│  │                                                                     │    │
+│  │ Task 3: "Check inventory levels for bestsellers"                    │    │
+│  │         State: complete | Priority: 0.6                             │    │
+│  │                                                                     │    │
+│  │ Slot 4: [empty - available for urgent task]                         │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  COLUMN 2: NOTES (TTL-based queue)                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Note 1: "Review Facebook ad ROAS - seller mentioned yesterday"      │    │
+│  │         TTL: 4h remaining | Priority: 0.6 | Escalating...           │    │
+│  │                                                                     │    │
+│  │ Note 2: "Investigate high return rate on Women's Kurta Size L"      │    │
+│  │         TTL: 24h remaining | Priority: 0.5                          │    │
+│  │                                                                     │    │
+│  │ Note 3: "Seller wants to expand to Amazon - research later"         │    │
+│  │         TTL: 7 days | Priority: 0.3                                 │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  COLUMN 3: OBJECTS (Ambient Context)                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ PEOPLE:                                                             │    │
+│  │   - Store Owner: Priya (relationship: 0.92, prefers concise)        │    │
+│  │   - Supplier: Vendor X (relationship: 0.68, slow shipping)          │    │
+│  │                                                                     │    │
+│  │ ENTITIES:                                                           │    │
+│  │   - Store: "Priya's Ethnic Wear" (Shopify Plus, ₹45L/month)         │    │
+│  │   - Top Product: Blue Ceramic Mug (SKU: BCM-001, salience: 0.95)    │    │
+│  │   - Problem Category: Women's Kurta (high returns, salience: 0.88)  │    │
+│  │                                                                     │    │
+│  │ BELIEFS (strength > 0.8):                                           │    │
+│  │   - "Maharashtra customers prefer COD" (0.89)                       │    │
+│  │   - "Weekend sales spike 40% for ethnic wear" (0.92)                │    │
+│  │   - "Vendor X takes 12 days avg lead time" (0.85)                   │    │
+│  │                                                                     │    │
+│  │ TEMPORAL:                                                           │    │
+│  │   - Current: Month-end (urgency: 1.5x)                              │    │
+│  │   - Upcoming: Diwali season in 45 days                              │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
