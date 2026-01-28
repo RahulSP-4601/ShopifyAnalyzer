@@ -1,8 +1,15 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openaiClient: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openaiClient) {
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return openaiClient;
+}
 
 export async function generateResponse(
   systemPrompt: string,
@@ -21,6 +28,7 @@ ${userMessage}
 Answer the user's question using the data provided. Be specific with numbers and percentages. Keep your response concise but informative. If the data doesn't fully answer the question, explain what you can determine and what additional information would help.`;
 
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -57,6 +65,7 @@ Analyze the data and provide:
 Format your response as a structured report with clear sections. Use specific numbers and percentages. Keep it professional but easy to understand.`;
 
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],

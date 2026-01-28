@@ -1,4 +1,5 @@
 import { Store } from "@prisma/client";
+import { decryptToken } from "./oauth";
 
 // Use a supported Shopify API version - update this periodically
 // Supported versions as of 2026: 2026-01, 2025-10, 2025-07, 2025-04
@@ -7,9 +8,21 @@ const FETCH_TIMEOUT_MS = 30000; // 30 second timeout for API calls
 
 export class ShopifyClient {
   private store: Store;
+  private accessToken: string;
 
-  constructor(store: Store) {
+  /**
+   * Create a ShopifyClient
+   * @param store - Store object with accessToken
+   * @param isEncrypted - Whether the accessToken in store is encrypted (default: true for DB-stored tokens)
+   */
+  constructor(store: Store, isEncrypted: boolean = true) {
+    if (!store.accessToken) {
+      throw new Error("Store access token is required for API calls");
+    }
     this.store = store;
+    // Decrypt the token if it's encrypted (tokens from database are encrypted)
+    // Pass isEncrypted=false when using a temp store with plaintext token
+    this.accessToken = isEncrypted ? decryptToken(store.accessToken) : store.accessToken;
   }
 
   private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -22,7 +35,7 @@ export class ShopifyClient {
         ...options,
         signal: controller.signal,
         headers: {
-          "X-Shopify-Access-Token": this.store.accessToken,
+          "X-Shopify-Access-Token": this.accessToken,
           "Content-Type": "application/json",
           ...options?.headers,
         },
@@ -68,7 +81,7 @@ export class ShopifyClient {
         {
           signal: controller.signal,
           headers: {
-            "X-Shopify-Access-Token": this.store.accessToken,
+            "X-Shopify-Access-Token": this.accessToken,
             "Content-Type": "application/json",
           },
         }
@@ -115,7 +128,7 @@ export class ShopifyClient {
         {
           signal: controller.signal,
           headers: {
-            "X-Shopify-Access-Token": this.store.accessToken,
+            "X-Shopify-Access-Token": this.accessToken,
             "Content-Type": "application/json",
           },
         }
@@ -176,7 +189,7 @@ export class ShopifyClient {
         {
           signal: controller.signal,
           headers: {
-            "X-Shopify-Access-Token": this.store.accessToken,
+            "X-Shopify-Access-Token": this.accessToken,
             "Content-Type": "application/json",
           },
         }
